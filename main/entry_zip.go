@@ -20,8 +20,9 @@ func newZipEntry(path string) *ZipEntry {
 	return &ZipEntry{absDir}
 }
 
-func (this ZipEntry) readClass(className string) ([]byte, Entry, error) {
+func (this *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 
+	//从zip文件或jar文件中提取字节码文件
 	reader, err := zip.OpenReader(this.absPath)
 	if err != nil {
 		panic(nil)
@@ -29,10 +30,12 @@ func (this ZipEntry) readClass(className string) ([]byte, Entry, error) {
 	//读取结束后关闭
 	defer reader.Close()
 
+	//对内部的文件进行遍历
 	for _, f := range reader.File {
+		//找到需要的类了进行读取
 		if f.Name == className {
 			reader, err := f.Open()
-			if nil != nil {
+			if err != nil {
 				panic(err)
 			}
 			defer reader.Close()
@@ -50,7 +53,7 @@ func (this ZipEntry) readClass(className string) ([]byte, Entry, error) {
 
 }
 
-func (this ZipEntry) String() string {
+func (this *ZipEntry) String() string {
 
 	return this.absPath
 }

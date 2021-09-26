@@ -9,6 +9,7 @@ type CompositeEntry []Entry
 
 func newCompositeEntry(pathList string) CompositeEntry {
 	compositeEntry := []Entry{}
+	//将命令行输入的多个文件名分割成,存入一个entry切片
 	for _, path := range strings.Split(pathList, pahtListSeparator) {
 		entry := newEntry(path)
 		compositeEntry = append(compositeEntry, entry)
@@ -35,5 +36,6 @@ func (this CompositeEntry) String() string {
 	for i, entry := range this {
 		strs[i] = entry.String()
 	}
+	//将一系列字符串连接为一个字符串，之间用sep来分隔。
 	return strings.Join(strs, pahtListSeparator)
 }
