@@ -1,5 +1,12 @@
-package main
+package classfile
 
+//用于描述字段表和方法表,二者只在属性表上有区别
+//field_info { 	u2 access_flags ;
+//				u2 name_index;
+//				u2 descriptor_index;
+//				u2 attributes_count;
+//				attribute_info attributes[attributes_count];
+//			}
 type MemberInfo struct {
 	cp              ConstantPool
 	accessFlag      uint16
@@ -8,19 +15,19 @@ type MemberInfo struct {
 	attributes      []AttributeInfo
 }
 
-//读取所有的方法和字段
-//字段或方法的描述
-func reaMembers(reader *ClassReader, cp ConstantPool) []*MemberInfo {
+//读取方法表或字段表的所有内容
+func readMembers(reader *ClassReader, cp ConstantPool) []*MemberInfo {
 	//有多少个字段或方法
 	memberCount := reader.readUint16()
 	members := make([]*MemberInfo, memberCount)
 
-	for i, _ := range members {
+	for i := range members {
 		members[i] = reaMember(reader, cp)
 	}
+	return members
 }
 
-//读取一个方法或字段
+//读取方法表或字段的中的一个元素的所有信息
 func reaMember(reader *ClassReader, cp ConstantPool) *MemberInfo {
 
 	return &MemberInfo{
@@ -29,17 +36,17 @@ func reaMember(reader *ClassReader, cp ConstantPool) *MemberInfo {
 		nameIndex:       reader.readUint16(),
 		descriptorIndex: reader.readUint16(),
 
-		attributes: readeAttributes(reader, cp),
+		attributes: readAttributes(reader, cp),
 	}
 }
 
-//返回当前表的所代表的字段或方法名
+//返回当前表的名称
 func (this *MemberInfo) Name() string {
 
 	return this.cp.getUtf8(this.nameIndex)
 }
 
-//返回当前表的所代表的字段或方法的描述信息
+//返回当前元素的描述信息
 func (this *MemberInfo) Descriptor() string {
 
 	return this.cp.getUtf8(this.descriptorIndex)

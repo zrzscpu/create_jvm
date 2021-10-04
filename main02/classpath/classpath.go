@@ -1,4 +1,4 @@
-package main
+package classpath
 
 import (
 	"os"
@@ -34,10 +34,12 @@ func (this *ClassPath) parseBootAndExtClassthPath(jreOption string) {
 
 	//jre/lib/*
 	jreLibPath := filepath.Join(jreDir, "lib", "*")
+	//加载启动类加载器下的所有class文件
 	this.bootClassPath = newWildcardEntry(jreLibPath)
 
 	//jre/lib/ext/*
 	jreExtPath := filepath.Join(jreDir, "lib", "ext", "*")
+	//记载扩展类加载器下的所有class文件
 	this.extClassPath = newWildcardEntry(jreExtPath)
 
 }
@@ -53,6 +55,7 @@ func exists(path string) bool {
 	return true
 }
 
+//将jreoption转为地址
 func getJreDir(jreOption string) string {
 
 	//exists判断目录是否存在
@@ -63,10 +66,10 @@ func getJreDir(jreOption string) string {
 	if exists("./jre") {
 		return "./jre"
 	}
-	//用户指定的路径优先级高
+	//从javahome环境变量下查找
 	if env := os.Getenv("JAVA_HOME"); env != "" {
 		//jdk1.8的结构
-		//return filepath.Join(env,"jre")
+		return filepath.Join(env, "jre")
 
 		//jdk16 的jre
 	}
