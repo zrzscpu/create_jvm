@@ -1,6 +1,6 @@
 package classfile
 
-//用于描述字段表和方法表,二者只在属性表上有区别
+//用于描述方法字段集合,二者只在属性表上有区别
 //field_info { 	u2 access_flags ;
 //				u2 name_index;
 //				u2 descriptor_index;

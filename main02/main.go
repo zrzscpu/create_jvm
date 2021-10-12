@@ -1,10 +1,8 @@
 package main
 
 import (
-	"create_jvm/main02/classfile"
-	"create_jvm/main02/classpath"
+	"create_jvm/main02/rtda"
 	"fmt"
-	"strings"
 )
 
 //测试类路径解析和类加载(加载进内存)
@@ -39,43 +37,88 @@ func main() {
 //
 //}
 
+//解析字节码测试
+//func starJvm(cmd *Cmd) {
+//	classPath := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+//	className := strings.Replace(cmd.class, ".", "/", -1)
+//	classFile := loadClass(className, classPath)
+//	fmt.Println(cmd.class)
+//	printClassInfo(classFile)
+//}
+//func loadClass(class string, cp *classpath.ClassPath) *classfile.ClassFile {
+//
+//	classData, _, err := cp.ReadClass(class)
+//	if err != nil {
+//		panic(err)
+//	}
+//	cf, err := classfile.Parse(classData)
+//	if err != nil {
+//		panic(err)
+//	}
+//
+//	return cf
+//}
+//
+//func printClassInfo(cf *classfile.ClassFile) {
+//
+//	fmt.Printf("version: %v.%v\n", cf.MajorVersion(), cf.MinorVersion())
+//
+//	fmt.Printf("constants count: %v\n", len(cf.Constantpool()))
+//	fmt.Printf("access flags: 0x%x\n", cf.Accessflag())
+//	fmt.Printf("this class: %v\n", cf.ClassName())
+//	fmt.Printf("super class: %v\n", cf.SuperClassName())
+//	fmt.Printf("interfaces: %v\n", cf.InterfaceNames())
+//	fmt.Printf("fields count: %v\n", len(cf.Fields()))
+//	for _, f := range cf.Fields() {
+//		fmt.Printf(" %s\n", f.Name())
+//	}
+//
+//	fmt.Printf("methods count: %v\n", len(cf.Methods()))
+//	for _, m := range cf.Methods() {
+//		fmt.Printf(" %s\n", m.Name())
+//	}
+//}
+
 func starJvm(cmd *Cmd) {
-	classPath := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-	className := strings.Replace(cmd.class, ".", "/", -1)
-	classFile := loadClass(className, classPath)
-	fmt.Println(cmd.class)
-	printClassInfo(classFile)
-}
-func loadClass(class string, cp *classpath.ClassPath) *classfile.ClassFile {
-
-	classData, _, err := cp.ReadClass(class)
-	if err != nil {
-		panic(err)
-	}
-	cf, err := classfile.Parse(classData)
-	if err != nil {
-		panic(err)
-	}
-
-	return cf
+	frame := rtda.NewFrame(100, 100)
+	testLocalVars(frame.LocalVars())
+	//testOperandStack(frame.OperandStack())
 }
 
-func printClassInfo(cf *classfile.ClassFile) {
+func testOperandStack(stack *rtda.OperandStack) {
 
-	fmt.Printf("version: %v.%v\n", cf.MajorVersion(), cf.MinorVersion())
+	stack.PushInt(123)
+	println(stack.PopInt())
 
-	fmt.Printf("constants count: %v\n", len(cf.Constantpool()))
-	fmt.Printf("access flags: 0x%x\n", cf.Accessflag())
-	fmt.Printf("this class: %v\n", cf.ClassName())
-	fmt.Printf("super class: %v\n", cf.SuperClassName())
-	fmt.Printf("interfaces: %v\n", cf.InterfaceNames())
-	fmt.Printf("fields count: %v\n", len(cf.Fields()))
-	for _, f := range cf.Fields() {
-		fmt.Printf(" %s\n", f.Name())
-	}
+	stack.PushLong(123333333333)
+	println(stack.PopInt())
 
-	fmt.Printf("methods count: %v\n", len(cf.Methods()))
-	for _, m := range cf.Methods() {
-		fmt.Printf(" %s\n", m.Name())
-	}
+	stack.PushFloat(3.14)
+	println(stack.PopInt())
+
+	stack.PushDouble(3.1415151431413124)
+	println(stack.PopDouble())
+
+	stack.PushRef(nil)
+	println(stack.PopRef())
+
+}
+
+func testLocalVars(LocalVars rtda.LocalVars) {
+	LocalVars.SetInt(0, 100)
+	LocalVars.SetInt(1, -100)
+	LocalVars.SetLong(2, 2997924570)
+	LocalVars.SetLong(4, 2997924570)
+
+	LocalVars.SetFloat(6, 3.141592653)
+	LocalVars.SetDouble(7, 2.71828182845)
+	LocalVars.SetRef(9, nil)
+
+	println(LocalVars.GetInt(0))
+	println(LocalVars.GetInt(1))
+	println(LocalVars.GetLong(2))
+	println(LocalVars.GetLong(4))
+	println(LocalVars.GetFloat(6))
+	println(LocalVars.GetDouble(7))
+	println(LocalVars.GetRef(9))
 }

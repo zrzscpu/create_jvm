@@ -3,7 +3,7 @@ package classfile
 /*属性表的通用定义
 attribute_info {
 	u2 attribute_name_index;
-	u4 attribute_length;
+	u4 attribute_length;	//表示这个属性的长度
 	u1 info[attribute_length];
 }
 */
