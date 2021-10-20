@@ -2,13 +2,17 @@ package base
 
 type BytecodeReader struct {
 	code []byte
-	pc   int
+	pc   uint
 }
 
 //重新设置，使这个对象可以重用
-func (this *BytecodeReader) Reset(code []byte, pc int) {
+func (this *BytecodeReader) Reset(code []byte, pc uint) {
 	this.code = code
 	this.pc = pc
+}
+
+func (this *BytecodeReader) Pc() uint {
+	return this.pc
 }
 
 func (this *BytecodeReader) ReadUint8() uint8 {
@@ -32,9 +36,25 @@ func (this BytecodeReader) ReadInt16() int16 {
 }
 
 func (this *BytecodeReader) ReadInt32() int32 {
-	byte1 := this.ReadUint8()
-	byte2 := this.ReadUint8()
-	byte3 := this.ReadUint8()
-	byte4 := this.ReadUint8()
-	return (int32(((byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4)))
+	byte1 := int32(this.ReadUint8())
+	byte2 := int32(this.ReadUint8())
+	byte3 := int32(this.ReadUint8())
+	byte4 := int32(this.ReadUint8())
+	res := int32((byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4)
+	return res
+}
+
+//default offset在字节码中的地址是4的倍数，前面有0-3字节的空白
+func (this *BytecodeReader) SkipPadding() {
+	for this.pc%4 != 0 {
+		this.ReadUint8()
+	}
+}
+
+func (this *BytecodeReader) ReadInt32s(n int32) []int32 {
+	ints := make([]int32, n)
+	for i := range ints {
+		ints[i] = this.ReadInt32()
+	}
+	return ints
 }

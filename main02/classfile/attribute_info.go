@@ -13,7 +13,7 @@ type AttributeInfo interface {
 
 //读取所有的属性表
 func readAttributes(reader *ClassReader, cp ConstantPool) []AttributeInfo {
-	//读取长度
+	//有几个属性表
 	attributesCount := reader.readUint16()
 	attributes := make([]AttributeInfo, attributesCount)
 
@@ -46,7 +46,7 @@ func newAttributeInfo(attrName string, attrLen uint32, cp ConstantPool) Attribut
 	case "Code":
 		return &CodeAttribute{cp: cp}
 
-	//常量表
+	//常量表,保存常量属性,保存在在字段集合的元素中
 	case "ConstantValue":
 		return &ConstantValueAttribute{}
 
@@ -54,11 +54,12 @@ func newAttributeInfo(attrName string, attrLen uint32, cp ConstantPool) Attribut
 		return &DeprecatedAttribute{}
 
 	//异常表
-	case "Exceptions":
-		return &ExceptionsAttribute{}
+	//case "Exceptions":
+	//	return &ExceptionsAttribute{}
 
 	//本地变量表
-	//case "LocalVariableTable": return &LocalVariableTableAttribute{}
+	case "LocalVariableTable":
+		return &LineNumberTableAttribute{}
 
 	//class文件属性表
 	case "SourceFile":

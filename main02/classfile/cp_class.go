@@ -6,6 +6,7 @@ CONSTANT_Class_info {
 	u2 name_index;
 }
 */
+//nameindex 指向一个utf8的常量池索引
 type ConstantClassInfo struct {
 	cp        ConstantPool
 	nameIndex uint16

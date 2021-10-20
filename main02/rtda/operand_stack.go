@@ -7,7 +7,7 @@ type OperandStack struct {
 	slots []Slot
 }
 
-func newOperandStack(maxStack uint) *OperandStack {
+func newOperandStack(maxStack uint16) *OperandStack {
 	return &OperandStack{
 		slots: make([]Slot, maxStack),
 		index: 0,
@@ -78,4 +78,16 @@ func (this *OperandStack) PopRef() *Object {
 	ref := this.slots[this.index].ref
 	this.slots[this.index].ref = nil
 	return ref
+}
+
+/**
+这两个函数给指令用
+*/
+func (this *OperandStack) PushSlot(slot Slot) {
+	this.slots[this.index] = slot
+	this.index++
+}
+func (this *OperandStack) PopSlot() Slot {
+	this.index--
+	return this.slots[this.index]
 }

@@ -1,7 +1,7 @@
 package rtda
 
 type Thread struct {
-	pc    int
+	pc    uint
 	stack *Stack
 }
 
@@ -13,13 +13,13 @@ func NewThread() *Thread {
 }
 
 // getter
-func (this *Thread) PC() int {
+func (this *Thread) PC() uint {
 	return this.pc
 
 }
 
 // setter
-func (this *Thread) SetPC(pc int) {
+func (this *Thread) SetPC(pc uint) {
 	this.pc = pc
 }
 
@@ -37,4 +37,12 @@ func (this *Thread) PopFrame() *Frame {
 func (this *Thread) CurrentFrame() *Frame {
 
 	return this.stack.top()
+}
+
+func (this *Thread) NewFrame(maxLocals, maxStack uint16) *Frame {
+	return NewFrame(this, maxLocals, maxStack)
+}
+
+func (this *Thread) SetNextPc(nextPC int) {
+
 }

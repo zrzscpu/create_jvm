@@ -24,6 +24,7 @@ func parseCmd() *Cmd {
 	flag.StringVar(&cmd.cpOption, "classpath", "", "classpath")
 	flag.StringVar(&cmd.XjreOption, "Xjre", "", "path to jre")
 	flag.StringVar(&cmd.cpOption, "cp", "", "classpath")
+	flag.StringVar(&cmd.class, "class", "", "class")
 	flag.Parse()
 	args := flag.Args()
 	if len(args) > 0 {

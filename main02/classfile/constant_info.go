@@ -56,6 +56,7 @@ func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 	case CONSTANT_Utf8:
 		return &ConstantUtf8Info{}
 
+	//以下这些是引用
 	case CONSTANT_String:
 		return &ConstantStringInfo{cp: cp}
 

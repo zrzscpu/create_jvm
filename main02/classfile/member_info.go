@@ -1,6 +1,6 @@
 package classfile
 
-//用于描述方法字段集合,二者只在属性表上有区别
+//用于描述方法 字段集合,二者只在属性表上有区别
 //field_info { 	u2 access_flags ;
 //				u2 name_index;
 //				u2 descriptor_index;
@@ -22,13 +22,13 @@ func readMembers(reader *ClassReader, cp ConstantPool) []*MemberInfo {
 	members := make([]*MemberInfo, memberCount)
 
 	for i := range members {
-		members[i] = reaMember(reader, cp)
+		members[i] = readMember(reader, cp)
 	}
 	return members
 }
 
 //读取方法表或字段的中的一个元素的所有信息
-func reaMember(reader *ClassReader, cp ConstantPool) *MemberInfo {
+func readMember(reader *ClassReader, cp ConstantPool) *MemberInfo {
 
 	return &MemberInfo{
 		cp:              cp,
@@ -50,4 +50,15 @@ func (this *MemberInfo) Name() string {
 func (this *MemberInfo) Descriptor() string {
 
 	return this.cp.getUtf8(this.descriptorIndex)
+}
+
+//返回当前方法的信息
+func (this *MemberInfo) CodeAttribute() *CodeAttribute {
+	for _, attributeInfo := range this.attributes {
+		switch attributeInfo.(type) {
+		case *CodeAttribute:
+			return attributeInfo.(*CodeAttribute)
+		}
+	}
+	return nil
 }

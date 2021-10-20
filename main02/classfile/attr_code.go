@@ -28,13 +28,6 @@ type CodeAttribute struct {
 	attributes     []AttributeInfo
 }
 
-type ExceptionTableEntry struct {
-	startPc   uint16
-	endPc     uint16
-	handlerPc uint16
-	catchType uint16
-}
-
 func (this *CodeAttribute) readInfo(reader *ClassReader) {
 	//操作数栈最大容量
 	this.maxStack = reader.readUint16()
@@ -54,14 +47,31 @@ func (this *CodeAttribute) readInfo(reader *ClassReader) {
 
 }
 
+func (this *CodeAttribute) MaxLocals() uint16 {
+	return this.maxLocals
+}
+func (this *CodeAttribute) MaxStack() uint16 {
+	return this.maxStack
+}
+func (this *CodeAttribute) Code() []byte {
+	return this.code
+}
+
+type ExceptionTableEntry struct {
+	startPc   uint16
+	endPc     uint16
+	handlerPc uint16
+	catchType uint16
+}
+
 //解析属性表的函数
 func readExceptionTable(reader *ClassReader) []*ExceptionTableEntry {
-	//异常表的长度
+	//异常表的个数
 	exceptionTableLength := reader.readUint16()
 
 	//异常表分配空间
 	exceptionTable := make([]*ExceptionTableEntry, exceptionTableLength)
-	//
+
 	for i := range exceptionTable {
 		exceptionTable[i] = &ExceptionTableEntry{
 			startPc: reader.readUint16(),

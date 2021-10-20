@@ -45,7 +45,6 @@ func (this *ClassReader) readUint32() uint32 {
 	val := binary.BigEndian.Uint32(this.data)
 	this.data = this.data[4:]
 	return val
-
 }
 
 /*

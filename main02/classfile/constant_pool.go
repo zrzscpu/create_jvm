@@ -60,7 +60,7 @@ func (this ConstantPool) getNameAndType(index uint16) (string, string) {
 //从常量池中读取类名
 func (this ConstantPool) getClassName(index uint16) string {
 
-	//先找到描述类名的成员信息
+	//先找到描述类名的常量池索引
 	classInfo := this.getConstantInfo(index).(*ConstantClassInfo)
 	return this.getUtf8(classInfo.nameIndex)
 }

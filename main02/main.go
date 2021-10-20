@@ -1,8 +1,10 @@
 package main
 
 import (
-	"create_jvm/main02/rtda"
+	"create_jvm/main02/classfile"
+	"create_jvm/main02/classpath"
 	"fmt"
+	"strings"
 )
 
 //测试类路径解析和类加载(加载进内存)
@@ -17,7 +19,7 @@ func main() {
 		printUsage()
 	}
 
-	starJvm(cmd)
+	startJVM(cmd)
 
 }
 
@@ -79,46 +81,81 @@ func main() {
 //	}
 //}
 
-func starJvm(cmd *Cmd) {
-	frame := rtda.NewFrame(100, 100)
-	testLocalVars(frame.LocalVars())
-	//testOperandStack(frame.OperandStack())
+//对运行时数据区的测试
+//func starJvm(cmd *Cmd) {
+//	frame := rtda.NewFrame(100, 100)
+//	testLocalVars(frame.LocalVars())
+//	//testOperandStack(frame.OperandStack())
+//}
+//
+//func testOperandStack(stack *rtda.OperandStack) {
+//
+//	stack.PushInt(123)
+//	println(stack.PopInt())
+//
+//	stack.PushLong(123333333333)
+//	println(stack.PopInt())
+//
+//	stack.PushFloat(3.14)
+//	println(stack.PopInt())
+//
+//	stack.PushDouble(3.1415151431413124)
+//	println(stack.PopDouble())
+//
+//	stack.PushRef(nil)
+//	println(stack.PopRef())
+//
+//}
+//
+//func testLocalVars(LocalVars rtda.LocalVars) {
+//	LocalVars.SetInt(0, 100)
+//	LocalVars.SetInt(1, -100)
+//	LocalVars.SetLong(2, 2997924570)
+//	LocalVars.SetLong(4, 2997924570)
+//
+//	LocalVars.SetFloat(6, 3.141592653)
+//	LocalVars.SetDouble(7, 2.71828182845)
+//	LocalVars.SetRef(9, nil)
+//
+//	println(LocalVars.GetInt(0))
+//	println(LocalVars.GetInt(1))
+//	println(LocalVars.GetLong(2))
+//	println(LocalVars.GetLong(4))
+//	println(LocalVars.GetFloat(6))
+//	println(LocalVars.GetDouble(7))
+//	println(LocalVars.GetRef(9))
+//}
+
+func loadClass(className string, cp *classpath.ClassPath) *classfile.ClassFile {
+	classData, _, err := cp.ReadClass(className)
+	if err != nil {
+		panic(err)
+	}
+	cf, err := classfile.Parse(classData)
+	if err != nil {
+		panic(err)
+	}
+	return cf
 }
 
-func testOperandStack(stack *rtda.OperandStack) {
-
-	stack.PushInt(123)
-	println(stack.PopInt())
-
-	stack.PushLong(123333333333)
-	println(stack.PopInt())
-
-	stack.PushFloat(3.14)
-	println(stack.PopInt())
-
-	stack.PushDouble(3.1415151431413124)
-	println(stack.PopDouble())
-
-	stack.PushRef(nil)
-	println(stack.PopRef())
-
+func getMainMethod(file *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range file.Methods() {
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
 }
+func startJVM(cmd *Cmd) {
+	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	className := strings.Replace(cmd.class, ".", "/", -1)
 
-func testLocalVars(LocalVars rtda.LocalVars) {
-	LocalVars.SetInt(0, 100)
-	LocalVars.SetInt(1, -100)
-	LocalVars.SetLong(2, 2997924570)
-	LocalVars.SetLong(4, 2997924570)
+	cf := loadClass(className, cp)
 
-	LocalVars.SetFloat(6, 3.141592653)
-	LocalVars.SetDouble(7, 2.71828182845)
-	LocalVars.SetRef(9, nil)
-
-	println(LocalVars.GetInt(0))
-	println(LocalVars.GetInt(1))
-	println(LocalVars.GetLong(2))
-	println(LocalVars.GetLong(4))
-	println(LocalVars.GetFloat(6))
-	println(LocalVars.GetDouble(7))
-	println(LocalVars.GetRef(9))
+	mainMethod := getMainMethod(cf)
+	if mainMethod != nil {
+		interpret(mainMethod)
+	} else {
+		fmt.Printf("Main method not found in class %s\n", cmd.class)
+	}
 }
