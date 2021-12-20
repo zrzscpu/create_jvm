@@ -21,6 +21,9 @@ func (this *ConstantIntegerInfo) readInfo(reader *ClassReader) {
 	this.val = int32(bytes)
 
 }
+func (this *ConstantIntegerInfo) Value() int32 {
+	return this.val
+}
 
 /*占据两个位置的常量池引用
 CONSTANT_Long_info {
@@ -41,6 +44,9 @@ func (this *ConstantLongInfo) readInfo(reader *ClassReader) {
 	val := reader.readUint64()
 	this.val = int64(val)
 }
+func (this *ConstantLongInfo) Value() int64 {
+	return this.val
+}
 
 /*源定义
 CONSTANT_Float_info {
@@ -59,6 +65,9 @@ func (this *ConstantFloatInfo) readInfo(reader *ClassReader) {
 
 	val := reader.readUint32()
 	this.val = math.Float32frombits(val)
+}
+func (this *ConstantFloatInfo) Value() float32 {
+	return this.val
 }
 
 /*源定义
@@ -79,4 +88,7 @@ func (this *ConstantDoubleInfo) readInfo(reader *ClassReader) {
 
 	val := reader.readUint64()
 	this.val = math.Float64frombits(val)
+}
+func (this *ConstantDoubleInfo) Value() float64 {
+	return this.val
 }

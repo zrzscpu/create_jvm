@@ -1,5 +1,7 @@
 package rtda
 
+import "create_jvm/main02/rtda/heap"
+
 type Slot struct {
 
 	//存放一个值或一个引用
@@ -9,5 +11,5 @@ type Slot struct {
 	使用uint32 ，对于存放一个int64的值，需要转换两次，而使用int32无需转换
 	*/
 	num int32
-	ref *Object
+	ref *heap.Object
 }

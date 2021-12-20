@@ -30,8 +30,9 @@ func readAttribute(reader *ClassReader, cp ConstantPool) AttributeInfo {
 	attrNameIndex := reader.readUint16()
 	attrName := cp.getUtf8(attrNameIndex)
 
-	//属性的长度(属性也是一张表)
+	//属性中后续内容的长度
 	attrLen := reader.readUint32()
+
 	//创建这个表
 	attrInfo := newAttributeInfo(attrName, attrLen, cp)
 
@@ -46,7 +47,7 @@ func newAttributeInfo(attrName string, attrLen uint32, cp ConstantPool) Attribut
 	case "Code":
 		return &CodeAttribute{cp: cp}
 
-	//常量表,保存常量属性,保存在在字段集合的元素中
+	//常量属性final 修饰的会有这个
 	case "ConstantValue":
 		return &ConstantValueAttribute{}
 
@@ -57,6 +58,9 @@ func newAttributeInfo(attrName string, attrLen uint32, cp ConstantPool) Attribut
 	//case "Exceptions":
 	//	return &ExceptionsAttribute{}
 
+	//linenumbertable
+	//case "LinerNumberTable":
+	//	return &LinerNumberTable{}
 	//本地变量表
 	case "LocalVariableTable":
 		return &LineNumberTableAttribute{}

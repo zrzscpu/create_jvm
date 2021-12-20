@@ -32,7 +32,7 @@ func newWildcardEntry(path string) CompositeEntry {
 		}
 		//如果是一个目录,且该目录不等于baseDir 说明当前目录在baseDir之下
 		if info.IsDir() && path != baseDir {
-			//直接跳过,*的通配符不能找到子目录下的jar包
+			//这种搜索只搜索当前目录之下的jar包或class文件,而不会进入更深一层的目录搜索
 			return filepath.SkipDir
 		}
 		//在当前路径下且为jar包,进行 添加到 jarEntry中

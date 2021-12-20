@@ -18,6 +18,7 @@ func (this *IINNC) FetchOperands(reader *base.BytecodeReader) {
 	*/
 	this.Index = uint(reader.ReadUint8())
 	//The const is an immediate signed byte
+	//这里为何用32位,与局部变量表中的长度保持统一
 	this.Const = int32(reader.ReadInt8())
 
 }

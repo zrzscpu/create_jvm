@@ -17,11 +17,9 @@ func (this *DUP) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	slot := stack.PopSlot()
 	stack.PushSlot(slot)
+	stack.PushSlot(slot)
 }
 
-/**
-下面五条指令先空着
-*/
 /*
 bottom -> top
 [...][c][b][a]

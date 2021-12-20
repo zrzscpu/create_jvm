@@ -67,10 +67,10 @@ type ExceptionTableEntry struct {
 //解析属性表的函数
 func readExceptionTable(reader *ClassReader) []*ExceptionTableEntry {
 	//异常表的个数
-	exceptionTableLength := reader.readUint16()
+	exceptionTableNum := reader.readUint16()
 
 	//异常表分配空间
-	exceptionTable := make([]*ExceptionTableEntry, exceptionTableLength)
+	exceptionTable := make([]*ExceptionTableEntry, exceptionTableNum)
 
 	for i := range exceptionTable {
 		exceptionTable[i] = &ExceptionTableEntry{

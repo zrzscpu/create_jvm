@@ -1,5 +1,7 @@
 package rtda
 
+import "create_jvm/main02/rtda/heap"
+
 type Thread struct {
 	pc    uint
 	stack *Stack
@@ -39,8 +41,12 @@ func (this *Thread) CurrentFrame() *Frame {
 	return this.stack.top()
 }
 
-func (this *Thread) NewFrame(maxLocals, maxStack uint16) *Frame {
-	return NewFrame(this, maxLocals, maxStack)
+//func (this *Thread) NewFrame(maxLocals, maxStack uint16) *Frame {
+//	return NewFrame(this, maxLocals, maxStack)
+//}
+
+func (this *Thread) NewFrame(method *heap.Method) *Frame {
+	return newFrame(this, method)
 }
 
 func (this *Thread) SetNextPc(nextPC int) {

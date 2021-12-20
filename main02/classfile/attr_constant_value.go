@@ -7,6 +7,7 @@ ConstantValue_attribute {
 	u2 constantvalue_index;
 }
 */
+//常量属性
 type ConstantValueAttribute struct {
 	constantValueIndex uint16
 }

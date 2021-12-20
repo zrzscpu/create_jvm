@@ -41,6 +41,7 @@ func readConstantInfo(reader *ClassReader, cp ConstantPool) ConstantInfo {
 
 func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 	switch tag {
+	//常量
 	case CONSTANT_Integer:
 		return &ConstantIntegerInfo{}
 

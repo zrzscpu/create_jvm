@@ -23,7 +23,7 @@ func _fcmp(frame *rtda.Frame, gFlag bool) {
 		stack.PushInt(0)
 	} else if v1 < v2 {
 		stack.PushInt(-1)
-	} else if gFlag {
+	} else if gFlag { //以下是无法比较时候的情况
 		stack.PushInt(1)
 	} else {
 		stack.PushInt(-1)
@@ -34,9 +34,9 @@ func _fcmp(frame *rtda.Frame, gFlag bool) {
 //用fcmpg指 令比较的结果是1，
 //而用fcmpl指令比较的结果是-1
 func (this *FCMPL) Execute(frame *rtda.Frame) {
-	_fcmp(frame, true)
+	_fcmp(frame, false)
 }
 
 func (this *FCMPG) Execute(frame *rtda.Frame) {
-	_fcmp(frame, false)
+	_fcmp(frame, true)
 }

@@ -10,7 +10,7 @@ func readConstantPool(reader *ClassReader) ConstantPool {
 	//CONSTANT_Long_info和 CONSTANT_Double_info各占两个位置。
 	cpCount := int(reader.readUint16())
 	cp := make([]ConstantInfo, cpCount)
-	//常量池0号位置表示不存方法任何常量引用
+	//常量池0号位置表示不存在任何常量引用
 	for i := 1; i < cpCount; i++ {
 
 		//读取当前元素的信息

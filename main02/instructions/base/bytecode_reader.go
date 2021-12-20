@@ -1,6 +1,7 @@
 package base
 
 type BytecodeReader struct {
+	//code存放字节码
 	code []byte
 	pc   uint
 }
@@ -28,14 +29,15 @@ func (this *BytecodeReader) ReadInt8() int8 {
 func (this *BytecodeReader) ReadUint16() uint16 {
 	high := uint16(this.ReadUint8())
 	low := uint16(this.ReadUint8())
-	return (high<<8 + low)
+	return (high<<8 | low)
 }
 
-func (this BytecodeReader) ReadInt16() int16 {
+func (this *BytecodeReader) ReadInt16() int16 {
 	return int16(this.ReadUint16())
 }
 
 func (this *BytecodeReader) ReadInt32() int32 {
+	//不先转成32位的会有问题
 	byte1 := int32(this.ReadUint8())
 	byte2 := int32(this.ReadUint8())
 	byte3 := int32(this.ReadUint8())

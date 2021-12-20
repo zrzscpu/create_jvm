@@ -3,6 +3,7 @@ package main
 import (
 	"create_jvm/main02/classfile"
 	"create_jvm/main02/classpath"
+	"create_jvm/main02/rtda/heap"
 	"fmt"
 	"strings"
 )
@@ -146,13 +147,26 @@ func getMainMethod(file *classfile.ClassFile) *classfile.MemberInfo {
 	}
 	return nil
 }
+
+//func startJVM(cmd *Cmd) {
+//	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+//	className := strings.Replace(cmd.class, ".", "/", -1)
+//
+//	cf := loadClass(className, cp)
+//
+//	mainMethod := getMainMethod(cf)
+//	if mainMethod != nil {
+//		interpret(mainMethod)
+//	} else {
+//		fmt.Printf("Main method not found in class %s\n", cmd.class)
+//	}
+//}
 func startJVM(cmd *Cmd) {
 	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
 	className := strings.Replace(cmd.class, ".", "/", -1)
-
-	cf := loadClass(className, cp)
-
-	mainMethod := getMainMethod(cf)
+	classLoader := heap.NewClassLoader(cp)
+	mainClass := classLoader.LoadClass(className)
+	mainMethod := mainClass.GetMainMethod("main", "([Ljava/lang/String;)V")
 	if mainMethod != nil {
 		interpret(mainMethod)
 	} else {

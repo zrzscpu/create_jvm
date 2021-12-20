@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+//保存一个jar包的地址
 type ZipEntry struct {
 	absPath string
 }
@@ -20,6 +21,7 @@ func newZipEntry(path string) *ZipEntry {
 	return &ZipEntry{absDir}
 }
 
+//将jar包中所有的class文件读取
 func (this *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 
 	//从zip文件或jar文件中提取字节码文件

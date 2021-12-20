@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 )
 
+//描述目录的绝对路径
 type DirEntry struct {
 	absDir string
 }

@@ -7,7 +7,7 @@ type DeprecatedAttribute struct {
 }
 
 func (d DeprecatedAttribute) readInfo(reader *ClassReader) {
-	panic("implement me")
+	//panic("implement me")
 }
 
 //标记源文件中不存在的由编译器生成的类成员

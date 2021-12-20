@@ -5,6 +5,7 @@ import (
 	"create_jvm/main02/rtda"
 )
 
+//算数右移看符号位,逻辑不看
 /**
 int 类型左移
 */
@@ -55,7 +56,7 @@ func (this *LSHL) Execute(frame *rtda.Frame) {
 	val2 := stack.PopInt()
 	val1 := stack.PopLong()
 	s := uint32(val2) & 0x3f
-	res := val1 >> s
+	res := val1 << s
 	stack.PushLong(res)
 }
 

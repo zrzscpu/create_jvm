@@ -9,6 +9,7 @@ import (
 	"create_jvm/main02/instructions/extended"
 	"create_jvm/main02/instructions/loads"
 	"create_jvm/main02/instructions/math"
+	"create_jvm/main02/instructions/references"
 	"create_jvm/main02/instructions/stack"
 	"create_jvm/main02/instructions/stores"
 	"fmt"
@@ -56,6 +57,12 @@ var (
 	ILOAD_1 = &loads.ILOAD_1{}
 	ILOAD_2 = &loads.ILOAD_2{}
 	ILOAD_3 = &loads.ILOAD_3{}
+
+	ALOAD   = &loads.A_LOAD{}
+	ALOAD_0 = &loads.A_LOAD_0{}
+	ALOAD_1 = &loads.A_LOAD_1{}
+	ALOAD_2 = &loads.A_LOAD_2{}
+	ALOAD_3 = &loads.A_LOAD_3{}
 
 	IAND  = &math.IAND{}
 	LAND  = &math.LAND{}
@@ -114,6 +121,25 @@ var (
 	ISTORE_3 = &stores.ISTORE_3{}
 
 	IADD = &math.IADD{}
+
+	CHECK_CAST     = &references.CHECK_CAST{}
+	GET_FIELD      = &references.GET_FIELD{}
+	GET_STATIC     = &references.GET_STATIC{}
+	INSTANCE_OF    = &references.INSTANCEOF{}
+	INVOKE_VIRTUAL = &references.INVOKE_VIRTUAL{}
+	INVOKE_SPECIAL = &references.INVOKE_SPECIAL{}
+
+	NEW        = &references.NEW{}
+	PUT_STATIC = &references.PUT_STATIC{}
+	PUT_FIELD  = &references.PUT_FIELD{}
+
+	LDC   = &constants.LDC{}
+	LDC_W = &constants.LDC_W{}
+
+	ASTORE_0 = &stores.A_STORE_0{}
+	ASTORE_1 = &stores.A_STORE_1{}
+	ASTORE_2 = &stores.A_STORE_2{}
+	ASTORE_3 = &stores.A_STORE_3{}
 )
 
 func NewInstructions(opcode byte) base.Instruction {
@@ -172,6 +198,9 @@ func NewInstructions(opcode byte) base.Instruction {
 	case 0x11:
 		return SIPUSH
 
+	case 0x12:
+		return LDC
+
 	case 0xa7:
 		return GOTO
 
@@ -204,6 +233,19 @@ func NewInstructions(opcode byte) base.Instruction {
 		return ILOAD_2
 	case 0x1d:
 		return ILOAD_3
+
+	case 0x2a:
+		return ALOAD_0
+
+	case 0x2b:
+		return ALOAD_1
+
+	case 0x2c:
+		return ALOAD_2
+
+	case 0x2d:
+		return ALOAD_3
+
 	case 0x7e:
 		return IAND
 
@@ -257,6 +299,15 @@ func NewInstructions(opcode byte) base.Instruction {
 	case 0x42:
 		return LSTORE_3
 
+	case 0x4b:
+		return ASTORE_0
+	case 0x4c:
+		return ASTORE_1
+	case 0x4d:
+		return ASTORE_2
+	case 0x4e:
+		return ASTORE_3
+
 	case 0x96:
 		return FCMPG
 	case 0x95:
@@ -294,6 +345,27 @@ func NewInstructions(opcode byte) base.Instruction {
 
 	case 0x60:
 		return IADD
+
+	case 0xc0:
+		return CHECK_CAST
+	case 0xb4:
+		return GET_FIELD
+	case 0xb2:
+		return GET_STATIC
+	case 0xc1:
+		return INSTANCE_OF
+	case 0xb6:
+		return INVOKE_VIRTUAL
+
+	case 0xb7:
+		return INVOKE_SPECIAL
+
+	case 0xbb:
+		return NEW
+	case 0xb3:
+		return PUT_STATIC
+	case 0xb5:
+		return PUT_FIELD
 
 	default:
 		panic(fmt.Errorf("Unsupported opcode: 0x%x!", opcode))

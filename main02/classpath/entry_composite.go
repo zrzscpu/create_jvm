@@ -5,10 +5,14 @@ import (
 	"strings"
 )
 
+//为了实现指定多个目录下的加载
+//例如 java_home = C:\Program Files\Java\jdk-16.0.1	;C:\Program Files\Java\jdk-16.0.1
 type CompositeEntry []Entry
 
 func newCompositeEntry(pathList string) CompositeEntry {
 	compositeEntry := []Entry{}
+
+	//按;分隔成不同的entry
 	for _, path := range strings.Split(pathList, pahtListSeparator) {
 		entry := newEntry(path)
 		compositeEntry = append(compositeEntry, entry)

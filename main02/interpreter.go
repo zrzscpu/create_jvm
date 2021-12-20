@@ -1,26 +1,28 @@
 package main
 
 import (
-	"create_jvm/main02/classfile"
 	"create_jvm/main02/instructions"
 	"create_jvm/main02/instructions/base"
 	"create_jvm/main02/rtda"
+	"create_jvm/main02/rtda/heap"
 	"fmt"
 )
 
-func interpret(info *classfile.MemberInfo) {
-	//读取当前方法的code属性表
-	codeAttr := info.CodeAttribute()
-	locals := codeAttr.MaxLocals()
-	stack := codeAttr.MaxStack()
-	code := codeAttr.Code()
-
-	//为该方法创建线程
-	thread := rtda.NewThread()
-	frame := thread.NewFrame(locals, stack)
-	thread.PushFrame(frame)
-	loop(thread, code)
-}
+//func interpret(info *classfile.MemberInfo) {
+//	//读取当前方法的code属性表
+//	codeAttr := info.CodeAttribute()
+//	locals := codeAttr.MaxLocals()
+//	stack := codeAttr.MaxStack()
+//	code := codeAttr.Code()
+//
+//	//为该方法创建线程
+//	thread := rtda.NewThread()
+//	frame := thread.NewFrame(locals, stack)
+//	thread.PushFrame(frame)
+//
+//	defer catchErr(frame);
+//	loop(thread, code)
+//}
 
 func catchErr(frame *rtda.Frame) {
 	if r := recover(); r != nil {
@@ -56,4 +58,15 @@ func loop(thread *rtda.Thread, bytecode []byte) {
 		fmt.Println("%T", frame.OperandStack())
 		instruction.Execute(frame)
 	}
+}
+
+func interpret(method *heap.Method) {
+
+	//为该方法创建线程
+	thread := rtda.NewThread()
+	frame := thread.NewFrame(method)
+	thread.PushFrame(frame)
+
+	defer catchErr(frame)
+	loop(thread, method.Code())
 }

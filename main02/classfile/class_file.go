@@ -61,13 +61,13 @@ func (this *ClassFile) read(reader *ClassReader) {
 	//读取这个文件的访问标识
 	this.accessflag = reader.readUint16()
 
-	//读取这个类的类名
+	//读取这个类的类名，其实是一个string 类型的常量池信息
 	this.thisclass = reader.readUint16()
 
-	//读取这个类的父类
+	//读取这个类的父类，其实是一个string 类型的常量池信息
 	this.superclass = reader.readUint16()
 
-	//读取接口
+	//读取接口，其实是一个string 类型的常量池信息
 	this.interfaces = reader.readUint16s()
 
 	//解析域表信息

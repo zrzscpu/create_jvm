@@ -1,6 +1,9 @@
 package rtda
 
-import "math"
+import (
+	"create_jvm/main02/rtda/heap"
+	"math"
+)
 
 //slot的数组
 type LocalVars []Slot
@@ -65,12 +68,12 @@ func (this LocalVars) GetDouble(index uint) float64 {
 	return resval
 }
 
-func (this LocalVars) SetRef(index uint, ref *Object) {
+func (this LocalVars) SetRef(index uint, ref *heap.Object) {
 
 	this[index].ref = ref
 }
 
-func (this LocalVars) GetRef(index uint) *Object {
+func (this LocalVars) GetRef(index uint) *heap.Object {
 
 	return this[index].ref
 }

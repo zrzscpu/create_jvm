@@ -3,6 +3,7 @@ package classpath
 import (
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type ClassPath struct {
@@ -19,7 +20,7 @@ func Parse(jreOption, cpOption string) *ClassPath {
 	return cp
 }
 
-//将用户的类进行加载
+//将用户的指定类进行加载
 func (this *ClassPath) parseUserClassPath(cpOption string) {
 	if cpOption == "" {
 		cpOption = "." //有点疑惑
@@ -27,14 +28,14 @@ func (this *ClassPath) parseUserClassPath(cpOption string) {
 	this.userClassPath = newDirEntry(cpOption)
 }
 
-//将jre的配置信息转为路径信息存储到	bootClassPath Entry 和 extClassPath Entry
+//parseboot,getjredir首先看用户有没有指定jreOption选项,如果没有从java_home中拿到java的目录
 func (this *ClassPath) parseBootAndExtClassthPath(jreOption string) {
 
 	jreDir := getJreDir(jreOption)
 
 	//jre/lib/*
 	jreLibPath := filepath.Join(jreDir, "lib", "*")
-	//加载启动类加载器下的所有class文件
+	//newWildcardEntry读取这个目录下的所有jar包,并创建一个composite_entry
 	this.bootClassPath = newWildcardEntry(jreLibPath)
 
 	//jre/lib/ext/*
@@ -67,9 +68,10 @@ func getJreDir(jreOption string) string {
 		return "./jre"
 	}
 	//从javahome环境变量下查找
-	if env := os.Getenv("JAVA_HOME"); env != "" {
+	if env := os.Getenv("JAVA_HOME2"); env != "" {
+
 		//jdk1.8的结构
-		return filepath.Join(env, "jre")
+		return filepath.Join(strings.Split(env, ";")[0], "jre")
 
 		//jdk16 的jre
 	}
